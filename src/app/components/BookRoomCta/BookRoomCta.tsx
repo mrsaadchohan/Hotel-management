@@ -1,5 +1,3 @@
-'use client';
-
 import { Dispatch, FC, SetStateAction } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -10,35 +8,33 @@ type Props = {
   checkoutDate: Date | null;
   setCheckoutDate: Dispatch<SetStateAction<Date | null>>;
   setAdults: Dispatch<SetStateAction<number>>;
-  setNoOfChildren: Dispatch<SetStateAction<number>>;
-  calcMinCheckoutDate: () => Date | null;
+  setChildren: Dispatch<SetStateAction<number>>;
+  calcMinCheckoutDate: () => Date | null; // Corrected here
   price: number;
   discount: number;
   adults: number;
-  noOfChildren: number;
+  children: number;
   specialNote: string;
   isBooked: boolean;
   handleBookNowClick: () => void;
 };
 
-const BookRoomCta: FC<Props> = props => {
-  const {
-    price,
-    discount,
-    specialNote,
-    checkinDate,
-    setCheckinDate,
-    checkoutDate,
-    setCheckoutDate,
-    calcMinCheckoutDate,
-    setAdults,
-    setNoOfChildren,
-    adults,
-    noOfChildren,
-    isBooked,
-    handleBookNowClick,
-  } = props;
-
+const BookRoomCta: FC<Props> = ({
+  price,
+  discount,
+  specialNote,
+  checkinDate,
+  setCheckinDate,
+  checkoutDate,
+  setCheckoutDate,
+  calcMinCheckoutDate, // Corrected here
+  setAdults,
+  setChildren,
+  adults,
+  children,
+  isBooked,
+  handleBookNowClick,
+}) => {
   const discountPrice = price - (price / 100) * discount;
 
   const calcNoOfDays = () => {
@@ -81,7 +77,7 @@ const BookRoomCta: FC<Props> = props => {
           </label>
           <DatePicker
             selected={checkinDate}
-            onChange={date => setCheckinDate(date)}
+            onChange={(date) => setCheckinDate(date)}
             dateFormat='dd/MM/yyyy'
             minDate={new Date()}
             id='check-in-date'
@@ -97,10 +93,10 @@ const BookRoomCta: FC<Props> = props => {
           </label>
           <DatePicker
             selected={checkoutDate}
-            onChange={date => setCheckoutDate(date)}
+            onChange={(date) => setCheckoutDate(date)}
             dateFormat='dd/MM/yyyy'
             disabled={!checkinDate}
-            minDate={calcMinCheckoutDate()}
+            minDate={calcMinCheckoutDate()} // Corrected here
             id='check-out-date'
             className='w-full border text-black border-gray-300 rounded-lg p-2.5 focus:ring-primary focus:border-primary'
           />
@@ -119,7 +115,7 @@ const BookRoomCta: FC<Props> = props => {
             type='number'
             id='adults'
             value={adults}
-            onChange={e => setAdults(+e.target.value)}
+            onChange={(e) => setAdults(+e.target.value)}
             min={1}
             max={5}
             className='w-full border border-gray-300 rounded-lg p-2.5'
@@ -135,8 +131,8 @@ const BookRoomCta: FC<Props> = props => {
           <input
             type='number'
             id='children'
-            value={noOfChildren}
-            onChange={e => setNoOfChildren(+e.target.value)}
+            value={children}
+            onChange={(e) => setChildren(+e.target.value)}
             min={0}
             max={3}
             className='w-full border border-gray-300 rounded-lg p-2.5'
@@ -150,7 +146,7 @@ const BookRoomCta: FC<Props> = props => {
         <></>
       )}
 
-      <button
+      <button 
         disabled={isBooked}
         onClick={handleBookNowClick}
         className='btn-primary w-full mt-6 disabled:bg-gray-500 disabled:cursor-not-allowed'
