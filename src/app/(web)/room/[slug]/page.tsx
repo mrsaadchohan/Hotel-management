@@ -37,7 +37,7 @@ const RoomDetails = (props: { params: { slug: string } }) => {
       return toast.error("Please provide checkinDate/ checkoutDate");
     }
     if (checkinDate > checkoutDate) {
-      return toast.error("Please choose valid checkin period");
+      return toast.error("Please choose a valid check-in period");
     }
     const numberOfDays = calNumDays();
     const hotelRoomSlug = room?.slug.current;
@@ -47,7 +47,7 @@ const RoomDetails = (props: { params: { slug: string } }) => {
         checkinDate,
         checkoutDate,
         adults,
-        children: children,
+        children,
         numberOfDays,
         hotelRoomSlug,
       });
@@ -61,9 +61,10 @@ const RoomDetails = (props: { params: { slug: string } }) => {
       }
     } catch (error) {
       console.log("Error:", error);
-      toast.error("An error occured");
+      toast.error("An error occurred");
     }
   };
+
   const calNumDays = () => {
     if (!checkinDate || !checkoutDate) return 0;
     const timeDiff = checkoutDate.getTime() - checkinDate.getTime();
@@ -78,8 +79,7 @@ const RoomDetails = (props: { params: { slug: string } }) => {
     throw new Error("Cannot fetch data");
 
   if (!room) return <LoadingSpinner />;
-  //   console.log(room)
-  //   console.log(room)
+  
   return (
     <>
       <HotelPhotoGallery photos={room.images} />
@@ -108,22 +108,6 @@ const RoomDetails = (props: { params: { slug: string } }) => {
                 <h2 className="font-bold text-3xl mb-2">Description</h2>
                 <p>{room.description}</p>
               </div>
-              {/* <div className="mb-11">
-                <h2 className="font-bold text-3xl mb-2">Offered Amenities</h2>
-                <div className='grid grid-cols-2'>
-                  {room.offeredAmenities.map(amenity => (
-                    <div
-                      key={amenity._key}
-                      className='flex items-center md:my-0 my-1'
-                    >
-                      <i className={`fa-solid ${amenity.icon}`}></i>
-                      <p className='text-xs md:text-base ml-2'>
-                        {amenity.amenity}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-            </div> */}
               <div className="mb-11">
                 <h2 className="font-bold text-3xl mb-2">Safety And Hygiene</h2>
                 <div className="grid grid-cols-2">
@@ -149,9 +133,6 @@ const RoomDetails = (props: { params: { slug: string } }) => {
                   </div>
                 </div>
               </div>
-              {/* <div className="md:col-span-4 rounded-xl shadow-lg dark:shadow dark:shadow-white">
-
-              </div> */}
             </div>
           </div>
           <div className="md:col-span-4 rounded-xl shadow-lg dark:shadow dark:shadow-white sticky top-10 h-fit overflow-hidden">

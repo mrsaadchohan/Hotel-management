@@ -9,6 +9,18 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2024-04-10",
 });
 
+interface Metadata {
+  adults: string;
+  checkinDate: string;
+  checkoutDate: string;
+  children: string;
+  hotelRoom: string;
+  numberOfDays: string;
+  user: string;
+  discount: string;
+  totalPrice: string;
+}
+
 export async function POST(req: Request, res: Response) {
   const reqBody = await req.text();
   const sig = req.headers.get("stripe-signature");
@@ -26,22 +38,21 @@ export async function POST(req: Request, res: Response) {
   // load our event
   switch (event.type) {
     case checkout_session_completed:
-      const session = event.data.object;
+      const session = event.data.object as Stripe.Checkout.Session;
+
+      const metadata = session.metadata as unknown as Metadata;
 
       const {
-        // @ts-ignore
-        metadata: {
-          adults,
-          checkinDate,
-          checkoutDate,
-          children,
-          hotelRoom,
-          numberOfDays,
-          user,
-          discount,
-          totalPrice,
-        },
-      } = session;
+        adults,
+        checkinDate,
+        checkoutDate,
+        children,
+        hotelRoom,
+        numberOfDays,
+        user,
+        discount,
+        totalPrice,
+      } = metadata;
 
       await createbooking({
         adults: Number(adults),

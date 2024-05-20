@@ -32,7 +32,7 @@ const FeaturedRoom: FC<Props> = ({ featuredRoom }) => {
                 <div key={image._key} className="rounded-2xl overflow-hidden">
                   <Image
                     src={image.url}
-                    alt={image._key}
+                    alt={image._key?.toString() || 'Image'}
                     width={300}
                     height={300}
                     className="img scale-animation"
